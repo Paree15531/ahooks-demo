@@ -8,6 +8,11 @@ import copy from "rollup-plugin-copy";
 
 const extensions = [".js", ".jsx", ".ts", ".tsx"];
 
+const packageJson = require("../package.json");
+
+const external = Object.keys(packageJson.peerDependencies || {});
+console.log(external);
+
 export default {
   input: "src/index.ts",
   output: [
@@ -25,14 +30,14 @@ export default {
       name: "ahooksDemo",
     },
   ],
+  external,
   plugins: [
     resolve({ extensions }),
     commonjs(),
-    typescript({ tsconfig: "./tsconfig.json" }),
     copy({
       targets: [
         {
-          src: "../package.json",
+          src: "./package.json",
           dest: "dist",
         },
       ],
@@ -47,7 +52,5 @@ export default {
         "@babel/preset-typescript",
       ],
     }),
-
-    terser(),
   ],
 };
